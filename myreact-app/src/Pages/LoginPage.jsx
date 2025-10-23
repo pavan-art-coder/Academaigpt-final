@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from "../api";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import {app} from '../config/firebase-config';
 
@@ -43,7 +43,7 @@ const LoginPage = () => {
       return;
     }
     try {
-      const response = await axios.post('/api/auth/login', { email, password });
+      const response = await api.post('/api/auth/login', { email, password });
       console.log('Login successful:', response.data);
       navigate('/dashboard');
     } catch (err) {
@@ -62,7 +62,7 @@ const LoginPage = () => {
       
       const idToken = await user.getIdToken();
       
-      const response = await axios.post('/api/auth/google-signin', { 
+      const response = await api.post('/api/auth/google-signin', { 
         token: idToken 
       });
 
