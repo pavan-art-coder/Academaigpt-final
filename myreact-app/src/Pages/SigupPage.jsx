@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from "../api";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import {app} from '../config/firebase-config';
 const auth = getAuth(app);
@@ -44,7 +44,7 @@ const SignupPage = () => {
       return;
     }
     try {
-      await axios.post('/api/auth/register', { name, email, password });
+      await api.post('/api/auth/register', { name, email, password });
       navigate('/login');
     } catch (err) {
       const errorMessage = err.response?.data?.message || 'Registration failed.';
@@ -63,7 +63,7 @@ const SignupPage = () => {
       
       const idToken = await user.getIdToken();
       
-      const response = await axios.post('/api/auth/google-signin', { 
+      const response = await api.post('/api/auth/google-signin', { 
         token: idToken 
       });
 
