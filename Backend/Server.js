@@ -10,6 +10,15 @@ const chatRoutes=require('./routes/chatroutes')
 const toolrouter=require('./routes/toolrouter')
 const config=require('./config')   
 
+const fs = require('fs');
+const path = require('path');
+
+// --- Add this code ---
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir);
+  console.log('Created uploads directory.');
+}
 
 
 const app=express()
