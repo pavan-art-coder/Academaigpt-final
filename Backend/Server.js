@@ -28,7 +28,7 @@ app.use('/api/tools',toolrouter)
 
 
 const corsOptions = {
-    origin: 'https://academaigpt-final-ak3q.vercel.app',, 
+    origin: 'https://academaigpt-final-ak3q.vercel.app'
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     optionsSuccessStatus: 204
 };
