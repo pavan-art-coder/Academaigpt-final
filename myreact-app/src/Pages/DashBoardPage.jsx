@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from "../api";
 import {
   Box, Typography, TextField, IconButton, CssBaseline, List, ListItemButton, ListItemIcon, 
   ListItemText, Paper, Tooltip, Select, MenuItem, FormControl, Drawer, AppBar, Toolbar, 
@@ -166,7 +166,7 @@ const DashboardPage = () => {
   
         try {
           // Fetch the user's uploaded documents
-          const docsResponse = await axios.get('/api/documents', config);
+          const docsResponse = await api.get('/api/documents', config);
           const initialDocs = Array.isArray(docsResponse.data.documents) ? docsResponse.data.documents : [];
           setDocuments(initialDocs);
   
@@ -174,7 +174,7 @@ const DashboardPage = () => {
           if (initialDocs.length > 0) {
             const firstDocId = initialDocs[0]._id;
             setSelectedDocumentId(firstDocId);
-            const chatResponse = await axios.get(`/api/chat/${firstDocId}`, config);
+            const chatResponse = await api.get(`/api/chat/${firstDocId}`, config);
             setChatHistory(chatResponse.data.messages);
             setChatHistory([{sender: 'ai', text: `Hello! I'm ready to discuss "${initialDocs[0].name}".`}]);
           }
@@ -206,7 +206,7 @@ const DashboardPage = () => {
   try {
     const token = localStorage.getItem('app_token');
     const config = { headers: { Authorization: `Bearer ${token}` } };
-    const response = await axios.get(`/api/chat/${docId}`, config);
+    const response = await api.get(`/api/chat/${docId}`, config);
 
     // Get chat messages from server
     const chatMessages = response.data.messages || [];
@@ -238,7 +238,7 @@ const DashboardPage = () => {
         
         try {
             // Call the new backend endpoint
-            const response = await axios.post('/api/chat/new', { documentId: defaultDocId }, config);
+            const response = await api.post('/api/chat/new', { documentId: defaultDocId }, config);
             const newChat = response.data;
             setChatSessions(prev => [newChat, ...prev]); // Add new chat to the top of the list
             setActiveChat(newChat); // Make the new chat active
@@ -261,7 +261,7 @@ const DashboardPage = () => {
       try {
         const token = localStorage.getItem('app_token');
         const config = { headers: { Authorization: `Bearer ${token}` } };
-        const response = await axios.post('/api/chat/message', { documentId: selectedDocument._id, message: currentMessage }, config);
+        const response = await api.post('/api/chat/message', { documentId: selectedDocument._id, message: currentMessage }, config);
         const aiResponse = { sender: 'ai', text: response.data.text };
         setChatHistory(prev => [...prev, aiResponse]);
       } catch (error) {
@@ -290,7 +290,7 @@ const DashboardPage = () => {
         const token = localStorage.getItem('app_token');
         const config = { headers: { Authorization: `Bearer ${token}` } };
         
-        const response = await axios.post(`/api/tools/${toolType.toLowerCase()}`, { 
+        const response = await api.post(`/api/tools/${toolType.toLowerCase()}`, { 
           documentId: selectedDocument._id 
         }, config);
         
@@ -334,7 +334,7 @@ const DashboardPage = () => {
       formData.append('document', file);
   
       try {
-          const response = await axios.post('/api/documents/upload', formData, config);
+          const response = await api.post('/api/documents/upload', formData, config);
           const newDocument = response.data.document;
           setDocuments(prev => [...prev, newDocument]);
           setSelectedDocumentId(newDocument._id);
