@@ -19,6 +19,14 @@ const admin = require("firebase-admin");
 
 const MONGO_URI=config.mongoUri
 
+
+const corsOptions = {
+    origin: 'https://academaigpt-final-ojbx.vercel.app',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    optionsSuccessStatus: 204
+};
+
+app.use(cors(corsOptions));
 app.use(express.json())
 app.use(bodyParser.json())
 app.use('/api/auth',userRoutes)
@@ -27,12 +35,6 @@ app.use('/api/chat',chatRoutes)
 app.use('/api/tools',toolrouter)
 
 
-const corsOptions = {
-    origin: 'https://academaigpt-final-ojbx.vercel.app',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    optionsSuccessStatus: 204
-};
-app.use(cors(corsOptions));
 
 const serviceAccount = JSON.parse(config.firebaseServiceAccountKey);
 admin.initializeApp({
